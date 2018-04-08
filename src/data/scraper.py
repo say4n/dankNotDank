@@ -36,7 +36,8 @@ reddit = praw.Reddit(client_id=CLIENT_ID,
                      password=PASSWORD,
                      user_agent=USERAGENT,
                      username=USERNAME)
-subs = ["dankmemes"]
+
+subs = ["dankmemes", "memes", "funny", "dank_meme"]
 
 
 def process_subreddit(sub):
@@ -62,8 +63,9 @@ def process_subreddit(sub):
         except:
             pass
 
-    print("\nDone")
-
 
 if __name__ == "__main__":
-    process_subreddit(subs[0])
+    for sub in subs:
+        process_subreddit(sub)
+
+    print("\nDone")
