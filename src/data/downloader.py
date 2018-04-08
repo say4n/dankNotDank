@@ -3,7 +3,7 @@
 from decouple import config
 from multiprocessing import Pool
 import subprocess
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 import wget
 
 
@@ -12,7 +12,8 @@ PATH = config("DATABASE_PATH")
 db = TinyDB(PATH)
 data = db.all()
 
-meme_urls = map(lambda submission: submission["media"], data)
+meme_urls = map(lambda submission: (submission["id"], submission["media"]),
+                data)
 
 
 # Data
@@ -24,9 +25,13 @@ subprocess.run(["mkdir", "-p", OUTPUT_DIR])
 NUM_WORKERS = 8
 
 
-def download(url, output_dir=OUTPUT_DIR):
+def download(post_id, post_url, output_dir=OUTPUT_DIR):
     """Given an image url, save it to output_dir"""
-    filename = wget.download(url, out=output_dir)
+    filename = wget.download(post_url, out=output_dir)
+
+    Post = Query()
+    db.update({"filename": filename}, Post.id == post_id)
+    
     print(f"Downloaded {filename}")
 
 
