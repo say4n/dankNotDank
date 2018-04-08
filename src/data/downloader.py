@@ -12,8 +12,7 @@ PATH = config("DATABASE_PATH")
 db = TinyDB(PATH)
 data = db.all()
 
-meme_urls = map(lambda submission: submission["media"]["images"][0]["source"]["url"],
-                data)
+meme_urls = map(lambda submission: submission["media"], data)
 
 
 # Data

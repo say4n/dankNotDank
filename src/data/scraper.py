@@ -11,19 +11,24 @@ from tinydb import TinyDB
 CLIENT_ID = config("CLIENT_ID")
 CLIENT_SECRET = config("CLIENT_SECRET")
 
+
 # Developer
 PASSWORD = config("PASSWORD")
 USERNAME = config("USERNAME")
+
 
 # Bot
 USERAGENT = config("USERAGENT")
 BOT_USERNAME = config("BOT_USERNAME")
 
+
 # Data
 PATH = config("DATABASE_PATH")
 db = TinyDB(PATH)
-# db.purge()
+db.purge()
 cnt = len(db.all())
+FILE_TYPES = [".jpg", ".jpeg", ".png"]
+
 
 # PRAW
 reddit = praw.Reddit(client_id=CLIENT_ID,
@@ -31,7 +36,6 @@ reddit = praw.Reddit(client_id=CLIENT_ID,
                      password=PASSWORD,
                      user_agent=USERAGENT,
                      username=USERNAME)
-
 subs = ["dankmemes"]
 
 
@@ -41,18 +45,20 @@ def process_subreddit(sub):
     subreddit = reddit.subreddit(sub)
 
     for submission in subreddit.top(limit=None):
+        # pdb.set_trace()
         try:
             data = {
                 "id"    : submission.id,
                 "ups"   : submission.ups,
                 "downs" : submission.downs,
-                "media" : submission.preview
+                "media" : submission.url
             }
 
-            db.insert(data)
-            cnt += 1
+            if any(submission.url.endswith(filetype) for filetype in FILE_TYPES):
+                db.insert(data)
+                cnt += 1
 
-            print(f"\rProcessed {cnt} items", end='')
+                print(f"\rProcessed {cnt} items", end='')
         except:
             pass
 
