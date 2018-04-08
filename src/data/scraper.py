@@ -48,10 +48,10 @@ def process_subreddit(sub):
         # pdb.set_trace()
         try:
             data = {
-                "id"    : submission.id,
-                "ups"   : submission.ups,
-                "downs" : submission.downs,
-                "media" : submission.url
+                "id": submission.id,
+                "ups": submission.ups,
+                "downs": submission.downs,
+                "media": submission.url
             }
 
             if any(submission.url.endswith(filetype) for filetype in FILE_TYPES):
@@ -63,6 +63,7 @@ def process_subreddit(sub):
             pass
 
     print("\nDone")
+
 
 if __name__ == "__main__":
     process_subreddit(subs[0])

@@ -29,6 +29,7 @@ def download(url, output_dir=OUTPUT_DIR):
     filename = wget.download(url, out=output_dir)
     print(f"Downloaded {filename}")
 
+
 if __name__ == "__main__":
     # Multiprocessing magic ✨
 
