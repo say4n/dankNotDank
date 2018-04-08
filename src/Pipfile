@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 tinydb = "*"
 python-decouple = "*"
-wget = "*"
 praw = "*"
 
 [dev-packages]

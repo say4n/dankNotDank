@@ -9,7 +9,6 @@ Quantify your memes with a dankness rating.
 ### dependencies
 - [`tinydb`](https://github.com/msiemens/tinydb)
 - [`decouple`](https://github.com/henriquebastos/python-decouple)
-- [`wget`](https://github.com/steveeJ/python-wget)
 - [`praw`](https://github.com/praw-dev/praw)
 
 Install the dependencies using [`pipenv`](https://github.com/pypa/pipenv) with `pipenv install` in the `src` directory.
