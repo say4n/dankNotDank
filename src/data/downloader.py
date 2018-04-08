@@ -7,18 +7,21 @@ from tinydb import TinyDB, Query
 import wget
 
 
+# Data
+OUTPUT_DIR = "memes"
+subprocess.run(["mkdir", "-p", OUTPUT_DIR])
+
+
 # Database
 PATH = config("DATABASE_PATH")
 db = TinyDB(PATH)
 data = db.all()
 
+MEME_LOOKUP_DB = config("MEME_LOOKUP_DB")
+meme_db = TinyDB(MEME_LOOKUP_DB)
+
 meme_urls = map(lambda submission: (submission["id"], submission["media"]),
                 data)
-
-
-# Data
-OUTPUT_DIR = "memes"
-subprocess.run(["mkdir", "-p", OUTPUT_DIR])
 
 
 # Config
@@ -30,7 +33,11 @@ def download(post_id, post_url, output_dir=OUTPUT_DIR):
     filename = wget.download(post_url, out=output_dir)
 
     Post = Query()
-    db.update({"filename": filename}, Post.id == post_id)
+    items = db.search(Post.id == post_id)
+    item = items[0]
+    item["filename"] = filename
+
+    meme_db.insert(item)
     
     print(f"Downloaded {filename}")
 
@@ -39,4 +46,4 @@ if __name__ == "__main__":
     # Multiprocessing magic ✨
 
     with Pool(NUM_WORKERS) as p:
-        p.map(download, meme_urls)
+        p.starmap(download, meme_urls)
