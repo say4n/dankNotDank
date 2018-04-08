@@ -5,3 +5,14 @@
 ### how dank is your meme?
 Quantify your memes with a dankness rating. 
 
+
+### dependencies
+- [`tinydb`](https://github.com/msiemens/tinydb)
+- [`decouple`](https://github.com/henriquebastos/python-decouple)
+- [`wget`](https://github.com/steveeJ/python-wget)
+- [`praw`](https://github.com/praw-dev/praw)
+
+
+### author
+Sayan Goswami (c) 2018. :octocat:
+
