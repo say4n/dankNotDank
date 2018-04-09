@@ -6,8 +6,6 @@ import os
 import shutil
 import subprocess
 from tinydb import TinyDB, Query
-from urllib.request import urlopen
-from urllib.parse import urlparse
 
 
 # Data
@@ -33,12 +31,18 @@ NUM_WORKERS = 8
 
 def download(post_id, post_url, output_dir=OUTPUT_DIR):
     """Given an image url, save it to output_dir"""
+    from urllib.request import urlopen
+    from urllib.parse import urlparse
+    
     *_, extension = os.path.basename(urlparse(post_url).path).split('.')
     output_filename = os.path.join(output_dir, f"{post_id}.{extension}")
     
-    # Download the file from `url` and save it locally under `output_filename`:    
-    with urlopen(post_url) as response, open(output_filename, 'wb') as out_file:
-        shutil.copyfileobj(response, out_file)
+    # Download the file from `url` and save it locally under `output_filename`: 
+    try:   
+        with urlopen(post_url) as response, open(output_filename, 'wb') as out_file:
+            shutil.copyfileobj(response, out_file)
+    except:
+        pass
     
     print(f"Downloaded {output_filename}")
 
