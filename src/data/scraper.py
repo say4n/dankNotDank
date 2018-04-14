@@ -56,7 +56,7 @@ def process_subreddit(sub):
                     "width": submission.thumbnail_width
                 },
                 "created_utc": submission.created_utc,
-                "author": submission.author,
+                "author": str(submission.author),
                 "id": submission.id,
                 "ups": submission.ups,
                 "downs": submission.downs,
