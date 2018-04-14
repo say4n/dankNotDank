@@ -49,6 +49,14 @@ def process_subreddit(sub):
         # pdb.set_trace()
         try:
             data = {
+                "title": submission.title,
+                "thumbnail": {
+                    "thumbnail": submission.thumbnail,
+                    "height": submission.thumbnail_height,
+                    "width": submission.thumbnail_width
+                },
+                "created_utc": submission.created_utc,
+                "author": submission.author,
                 "id": submission.id,
                 "ups": submission.ups,
                 "downs": submission.downs,
