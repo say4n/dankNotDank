@@ -7,6 +7,8 @@ name = "pypi"
 tinydb = "*"
 python-decouple = "*"
 praw = "*"
+keras = "*"
+tensorflow = "*"
 
 [dev-packages]
 
