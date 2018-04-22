@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
 
-import numpy as np
+from decouple import config
 import keras
+import numpy as np
+import pandas as pd
+from tinydb import TinyDB
 
-
+# Constants
 NUM_CHANNELS = 3
+DATABASE_PATH = config("DATABASE_PATH")
+
+
+def load_data():
+    db = TinyDB(DATABASE_PATH)
+    data = db.all()
+
+    return pd.DaraFrame(data)
+
 
 def classifier(num_channels):
     # Channels last : (height, width, num_channels)
@@ -14,36 +26,43 @@ def classifier(num_channels):
                                      name="dankNet_input_layer")
     
     # single stride 4x4 filter for 16 maps
-    x = keras.layers.Conv2D(16,(4,4), activation = 'elu')(input_layer)
+    x = keras.layers.Conv2D(16, (4, 4), activation='elu')(input_layer)
 
     # single stride 4x4 filter for 32 maps
-    x = keras.layers.Conv2D(32,(4,4), activation = 'elu')(x)
+    x = keras.layers.Conv2D(32, (4, 4), activation='elu')(x)
     x = keras.layers.Dropout(0.5)(x)
 
     # single stride 4x4 filter for 64 maps
-    x = keras.layers.Conv2D(64,(4,4), activation = 'elu')(x)
+    x = keras.layers.Conv2D(64, (4, 4), activation='elu')(x)
     x = keras.layers.Dropout(0.5)(x)
 
     # finally 128 maps for global average-pool
-    x = keras.layers.Conv2D(128, (1,1))(x)
+    x = keras.layers.Conv2D(128, (1, 1))(x)
 
     # pseudo-dense 128 layer
     x = keras.layers.GlobalMaxPooling2D()(x)
 
+    # dense layers
+    x = keras.layers.Dense(64, activation="elu")(x)
+    x = keras.layers.Dense(16, activation="elu")(x)
+
     # Output
-    output_layer = keras.layers.Dense(10, activation = "softmax")(x)
+    output_layer = keras.layers.Dense(1, activation="softmax")(x)
 
 
     model = keras.Model(inputs=input_layer, outputs=output_layer)
 
     return model
-    
+
 
 if __name__ == "__main__":
+    # Model
     dankNet_model = classifier(NUM_CHANNELS)
-    
     dankNet_model.compile(optimizer = "adam",
                           loss = "mse",
                           metrics=["accuracy"])
-
     print(dankNet_model.summary())
+
+    # Prelim data
+    all_data = load_data()
+    print(all_data.info())
