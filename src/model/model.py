@@ -10,15 +10,27 @@ from tinydb import TinyDB
 NUM_CHANNELS = 3
 DATABASE_PATH = config("DATABASE_PATH")
 
+# Lambdas
+LEGROOM = lambda num_lines: print("\n" * num_lines)
+
 
 def load_data():
+    """Load database"""
     db = TinyDB(DATABASE_PATH)
     data = db.all()
 
-    return pd.DaraFrame(data)
+    return pd.DataFrame(data)
+
+
+def process_dataset(df, train_validation_ratio = 0.8):
+    """Given a dataset, perform train-validation split"""
+    x_train, y_train, x_val, y_val = None, None, None, None
+
+    return (x_train, y_train, x_val, y_val)
 
 
 def classifier(num_channels):
+    """dankNet Classifier"""
     # Channels last : (height, width, num_channels)
     
     # Input layer
@@ -61,8 +73,12 @@ if __name__ == "__main__":
     dankNet_model.compile(optimizer = "adam",
                           loss = "mse",
                           metrics=["accuracy"])
-    print(dankNet_model.summary())
+    dankNet_model.summary()
+    LEGROOM(5)
 
     # Prelim data
     all_data = load_data()
-    print(all_data.info())
+    all_data["dankness"] = all_data.ups / (all_data.ups + all_data.downs)
+
+    all_data.info()
+    LEGROOM(5)
