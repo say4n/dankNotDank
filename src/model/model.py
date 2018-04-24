@@ -26,6 +26,11 @@ def process_dataset(df, train_validation_ratio = 0.8):
     """Given a dataset, perform train-validation split"""
     x_train, y_train, x_val, y_val = None, None, None, None
 
+    # image data
+    xS = None
+    # dankness score
+    yS = df.dankness
+
     return (x_train, y_train, x_val, y_val)
 
 
