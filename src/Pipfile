@@ -10,6 +10,7 @@ praw = "*"
 keras = "*"
 tensorflow = "*"
 pandas = "*"
+tinyrecord = "*"
 
 [dev-packages]
 
