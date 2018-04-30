@@ -6,6 +6,7 @@ import os
 import shutil
 import subprocess
 from tinydb import TinyDB, Query
+# from tinyrecord import transaction
 
 
 # Data
@@ -18,13 +19,12 @@ PATH = config("DATABASE_PATH")
 db = TinyDB(PATH)
 data = db.all()
 
-MEME_LOOKUP_DB = config("MEME_LOOKUP_DB")
-meme_db = TinyDB(MEME_LOOKUP_DB)
+# MEME_LOOKUP_DB = config("MEME_LOOKUP_DB")
+# meme_db = TinyDB(MEME_LOOKUP_DB)
+# meme_db.purge()
 
 meme_urls = map(lambda submission: (submission["id"], submission["media"]),
                 data)
-
-meme_data = []
 
 # Config
 NUM_WORKERS = 8
@@ -47,13 +47,15 @@ def download(post_id, post_url, output_dir=OUTPUT_DIR):
     # Download the file from `url` and save it locally under `output_filename`
     if not os.path.isfile(output_filename):
         try:   
-            with urlopen(post_url) as response, open(output_filename, 'wb') as out_file:
+            with urlopen(post_url) as response, open(output_filename, 'wb') as out_file, transaction(meme_db) as tr:
+
                 shutil.copyfileobj(response, out_file)
-                meme_data.append(_data)
+                # tr.insert(_data)
         except:
             pass
-    else:
-        meme_data.append(_data)
+    # else:
+    #     with transaction(meme_db) as tr:
+    #         tr.insert(_data)
     
     print(f"Downloaded {output_filename}")
 
@@ -62,5 +64,3 @@ if __name__ == "__main__":
     # Multiprocessing magic ✨
     with Pool(NUM_WORKERS) as p:
         p.starmap(download, meme_urls)
-
-    print(len(meme_data))
