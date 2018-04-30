@@ -60,7 +60,8 @@ def process_subreddit(sub):
                 "id": submission.id,
                 "ups": submission.ups,
                 "downs": submission.downs,
-                "media": submission.url
+                "media": submission.url,
+                "preview": submission.preview
             }
 
             if any(submission.url.endswith(filetype) for filetype in FILE_TYPES):
