@@ -23,7 +23,7 @@ def load_data():
 
 
 def process_dataset(df, train_validation_ratio = 0.8):
-    """Given a dataset, perform train-validation split"""
+    """Given a dataset, perform train-validation split and generate minibatches"""
     x_train, y_train, x_val, y_val = None, None, None, None
 
     # image data
