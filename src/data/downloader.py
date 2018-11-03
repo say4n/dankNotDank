@@ -6,7 +6,6 @@ import os
 import shutil
 import subprocess
 from tinydb import TinyDB, Query
-# from tinyrecord import transaction
 
 
 # Data
@@ -35,7 +34,7 @@ def download(post_id, post_url, output_dir=OUTPUT_DIR):
     from urllib.request import urlopen
     from urllib.parse import urlparse
     global meme_data
-    
+
     *_, extension = os.path.basename(urlparse(post_url).path).split('.')
     output_filename = os.path.join(output_dir, f"{post_id}.{extension}")
 
@@ -43,20 +42,17 @@ def download(post_id, post_url, output_dir=OUTPUT_DIR):
             "id": post_id,
             "filename": output_filename
             }
-    
+
     # Download the file from `url` and save it locally under `output_filename`
     if not os.path.isfile(output_filename):
-        try:   
-            with urlopen(post_url) as response, open(output_filename, 'wb') as out_file, transaction(meme_db) as tr:
+        try:
+            with urlopen(post_url) as response, open(output_filename,
+                                                     'wb') as out_file:
 
                 shutil.copyfileobj(response, out_file)
-                # tr.insert(_data)
-        except:
-            pass
-    # else:
-    #     with transaction(meme_db) as tr:
-    #         tr.insert(_data)
-    
+        except Exception as e:
+            print(e)
+
     print(f"Downloaded {output_filename}")
 
 

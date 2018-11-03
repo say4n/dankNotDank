@@ -64,13 +64,14 @@ def process_subreddit(sub):
                 "preview": submission.preview
             }
 
-            if any(submission.url.endswith(filetype) for filetype in FILE_TYPES):
+            if any(submission.url.endswith(filetype) for filetype in
+                   FILE_TYPES):
                 db.insert(data)
                 cnt += 1
 
                 print(f"\rProcessed {cnt} items", end='')
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":
