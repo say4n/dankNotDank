@@ -15,7 +15,7 @@ upvotes = [record['ups'] for record in data]
 
 hist, bins, _ = plt.hist(upvotes)
 plt.clf()
-logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
+logbins = np.logspace(np.log10(bins[0]), np.log10(bins[-1]), len(bins))
 plt.hist(upvotes, bins=logbins)
 
 plt.ylabel("# of Posts")
